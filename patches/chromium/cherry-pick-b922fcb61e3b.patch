@@ -1,7 +1,7 @@
-From b922fcb61e3b12cc53d0151605207e8d5578dfa7 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: rubberyuzu <yuzus@chromium.org>
 Date: Fri, 17 May 2024 02:53:09 +0000
-Subject: [PATCH] [bfcache] Use WeakPtr for delegate_
+Subject: Use WeakPtr for delegate_
 
 This CL starts using a WeakPtr for `delegate_`. This is because
 `ReportFeaturesToDelegate()` is posted and when it's executed,
@@ -21,13 +21,12 @@ Auto-Submit: Yuzu Saijo <yuzus@chromium.org>
 Commit-Queue: Kentaro Hara <haraken@chromium.org>
 Cr-Commit-Position: refs/branch-heads/6367@{#1190}
 Cr-Branched-From: d158c6dc6e3604e6f899041972edf26087a49740-refs/heads/main@{#1274542}
----
 
 diff --git a/third_party/blink/renderer/platform/scheduler/common/back_forward_cache_disabling_feature_tracker.cc b/third_party/blink/renderer/platform/scheduler/common/back_forward_cache_disabling_feature_tracker.cc
-index 2f57918..4b353b7 100644
+index e2f7dc1ff4384fa2e0dcb07539b269cdbb3f0c89..6bb65c49603e8efd3a84cabc6bf77a8a0fb359be 100644
 --- a/third_party/blink/renderer/platform/scheduler/common/back_forward_cache_disabling_feature_tracker.cc
 +++ b/third_party/blink/renderer/platform/scheduler/common/back_forward_cache_disabling_feature_tracker.cc
-@@ -22,9 +22,13 @@
+@@ -22,9 +22,13 @@ BackForwardCacheDisablingFeatureTracker::
  
  void BackForwardCacheDisablingFeatureTracker::SetDelegate(
      FrameOrWorkerScheduler::Delegate* delegate) {
@@ -43,7 +42,7 @@ index 2f57918..4b353b7 100644
  }
  
  void BackForwardCacheDisablingFeatureTracker::Reset() {
-@@ -163,7 +167,13 @@
+@@ -162,7 +166,13 @@ void BackForwardCacheDisablingFeatureTracker::ReportFeaturesToDelegate() {
    last_reported_sticky_ = sticky_features_and_js_locations_;
    FrameOrWorkerScheduler::Delegate::BlockingDetails details(
        non_sticky_features_and_js_locations_, sticky_features_and_js_locations_);
@@ -59,10 +58,10 @@ index 2f57918..4b353b7 100644
  
  }  // namespace scheduler
 diff --git a/third_party/blink/renderer/platform/scheduler/common/back_forward_cache_disabling_feature_tracker.h b/third_party/blink/renderer/platform/scheduler/common/back_forward_cache_disabling_feature_tracker.h
-index c78d791..1ec5cc4 100644
+index c78d791aa7c40a6775e84f79fd1a5e357328581e..1ec5cc4627cc71a941df32ecd989a5897f796dce 100644
 --- a/third_party/blink/renderer/platform/scheduler/common/back_forward_cache_disabling_feature_tracker.h
 +++ b/third_party/blink/renderer/platform/scheduler/common/back_forward_cache_disabling_feature_tracker.h
-@@ -119,8 +119,7 @@
+@@ -119,8 +119,7 @@ class PLATFORM_EXPORT BackForwardCacheDisablingFeatureTracker {
    BFCacheBlockingFeatureAndLocations non_sticky_features_and_js_locations_;
    BFCacheBlockingFeatureAndLocations sticky_features_and_js_locations_;
  
@@ -73,10 +72,10 @@ index c78d791..1ec5cc4 100644
  
    base::WeakPtrFactory<BackForwardCacheDisablingFeatureTracker> weak_factory_{
 diff --git a/third_party/blink/renderer/platform/scheduler/public/frame_or_worker_scheduler.h b/third_party/blink/renderer/platform/scheduler/public/frame_or_worker_scheduler.h
-index 12b056f..e2bdb43d 100644
+index 82befdeabdce4904002d6b35aaef8a796b613209..7f95ec0339cc2baabbae05a1a9b332e4dbc23bf5 100644
 --- a/third_party/blink/renderer/platform/scheduler/public/frame_or_worker_scheduler.h
 +++ b/third_party/blink/renderer/platform/scheduler/public/frame_or_worker_scheduler.h
-@@ -150,6 +150,11 @@
+@@ -149,6 +149,11 @@ class PLATFORM_EXPORT FrameOrWorkerScheduler {
      // changed when a blocking feature and its JS location are registered or
      // removed.
      virtual void UpdateBackForwardCacheDisablingFeatures(BlockingDetails) = 0;
