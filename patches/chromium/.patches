@@ -144,3 +144,5 @@ cherry-pick-b2cc7b7ac538.patch
 feat_add_support_for_missing_dialog_features_to_shell_dialogs.patch
 cherry-pick-03609e39be8c.patch
 x11_use_localized_display_label_only_for_browser_process.patch
+cherry-pick-24329fe5c4d0.patch
+m120-lts_mediasession_use_a_mediasessionimpl_weakptr_in.patch
